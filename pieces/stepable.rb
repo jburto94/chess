@@ -8,7 +8,7 @@ module Stepable
 
       next unless baord.valid_pos?(new_pos)
       
-      moves << new_pos if board.empty? || board[new_pos].color != color
+      moves << new_pos if board[new_pos].empty? || board[new_pos].color != color
     end
 
     moves
