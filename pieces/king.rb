@@ -1,5 +1,5 @@
 require_relative 'piece'
-require 'colorize'
+require_relative 'stepable'
 
 class King < Piece
   include Stepable
@@ -8,6 +8,7 @@ class King < Piece
     '♛'.colorize(color)
   end
 
+  protected
   def move_diffs
     [
       [0,1],

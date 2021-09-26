@@ -1,5 +1,5 @@
 require_relative 'piece'
-require 'colorize'
+require_relative 'slideable'
 
 class Bishop < Piece
   include Slideable
@@ -8,7 +8,7 @@ class Bishop < Piece
     '♝'.colorize(color)
   end
 
-  private
+  protected
   def move_dirs
     diagonal_dirs
   end

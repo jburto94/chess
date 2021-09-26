@@ -49,7 +49,8 @@ module Slideable
       else
         moves << pos if board[pos].color != color
       end
-
+    end
+    
     moves
   end
 end

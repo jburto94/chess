@@ -1,4 +1,4 @@
-require_relative '../board'
+require 'colorize'
 
 class Piece
   attr_reader :board, :color
@@ -21,11 +21,11 @@ class Piece
   end
 
   def valid_moves
-
+    moves
   end
 
   private
   def move_into_check?(end_pos)
-
+    
   end
 end

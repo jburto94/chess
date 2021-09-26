@@ -1,5 +1,5 @@
 require_relative 'piece'
-require 'colorize'
+require_relative 'slideable'
 
 class Rook < Piece
   include Slideable
@@ -8,7 +8,7 @@ class Rook < Piece
     '♜'.colorize(color)
   end
 
-  private
+  protected
   def move_dirs
     horizontal_dirs
   end
