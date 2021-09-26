@@ -3,14 +3,6 @@ require_relative 'pieces'
 class Board
   attr_reader :rows
 
-  def generate_board
-    (2..5).each do |row|
-      (0..7).each do |col|
-        rows[row][col] = NullPiece.instance
-      end
-    end
-  end
-
   def initialize
     @rows = Array.new(8) { Array.new(8) }
 
@@ -42,5 +34,35 @@ class Board
 
   def valid_pos?(pos)
     self[pos]
+  end
+
+  protected
+  def generate_name_pieces
+    name_pieces = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
+    (0..7).each do |col|
+      rows[0][col] = name_pieces[col].new(:black, self, [0,col])
+      rows[7][col] = name_pieces[col].new(:white, self, [7,col])
+    end
+  end
+
+  def generate_pawns
+    (0..7).each do |col|
+      rows[1][col] = Pawn.new(:black, self, [1,col])
+      rows[6][col] = Pawn.new(:white, self, [6,col])
+    end
+  end
+
+  def generate_empty_spaces
+    (2..5).each do |row|
+      (0..7).each do |col|
+        rows[row][col] = NullPiece.instance
+      end
+    end
+  end
+
+  def generate_board
+    generate_name_pieces
+    generate_pawns
+    generate_empty_spaces
   end
 end
