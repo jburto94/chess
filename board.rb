@@ -33,7 +33,8 @@ class Board
   end
 
   def valid_pos?(pos)
-    self[pos]
+    x,y = pos
+    x >= 0 && y >= 0 && x <= 7 && y <= 7
   end
 
   protected
