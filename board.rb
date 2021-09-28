@@ -37,6 +37,37 @@ class Board
     x >= 0 && y >= 0 && x <= 7 && y <= 7
   end
 
+  def checkmate?(color)
+    if in_check?(color)
+      rows.each do |row|
+        row.each do |piece|
+          return false if piece.valid_moves.length > 0
+        end
+      end
+      return true
+    end
+  end
+
+  def in_check?(color)
+    opponent_color = color == :white ? :black : :white
+    rows.each do |row|
+      row.each do |piece|
+        if piece.color == opponent_color
+          return true if piece.valid_moves.include?(find_king(color))
+        end
+      end
+    end
+    false
+  end
+
+  def find_king(color)
+    rows.each do |row|
+      row.each do |piece|
+        return piece.pos if piece.is_a?(King) && piece.color == color
+      end
+    end
+  end
+
   protected
   def generate_name_pieces
     name_pieces = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
