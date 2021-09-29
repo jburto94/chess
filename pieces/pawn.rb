@@ -5,9 +5,8 @@ class Pawn < Piece
     '︎♟︎'.colorize(color)
   end
 
-  def valid_moves
-    moves = forward_steps
-    moves += side_attacks
+  def moves
+    forward_steps + side_attacks
   end
 
   private
@@ -22,21 +21,21 @@ class Pawn < Piece
   end
 
   def forward_steps
-    moves = []
+    forward_moves = []
     x,y = pos
     move_pos = [x + forward_dir, y]
-    moves << move_pos if board[move_pos].empty? && board.valid_pos?(move_pos)
+    forward_moves << move_pos if board[move_pos].empty? && board.valid_pos?(move_pos)
 
     if at_start_row?
       move_pos = [x + (forward_dir * 2), y]
-      moves << move_pos if board[move_pos].empty? && board.valid_pos?(move_pos)
+      forward_moves << move_pos if board[move_pos].empty? && board.valid_pos?(move_pos)
     end
 
-    moves
+    forward_moves
   end
 
   def side_attacks
-    moves = []
+    side_moves = []
     x,y = pos
     sides = [
       [x + forward_dir, y - 1],
@@ -45,8 +44,8 @@ class Pawn < Piece
 
     sides.select! { |side| board.valid_pos?(side) }
 
-    sides.each { |side| moves << side if board[side].color != color && !board[side].empty?}
+    sides.each { |side| side_moves << side if board[side].color != color && !board[side].empty?}
 
-    moves
+    side_moves
   end
 end

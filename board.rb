@@ -32,6 +32,12 @@ class Board
     end
   end
 
+  def move_piece!(start_pos, end_pos)
+    self[end_pos] = self[start_pos]
+    self[end_pos].pos = end_pos
+    self[start_pos] = NullPiece.instance
+  end
+
   def valid_pos?(pos)
     x,y = pos
     x >= 0 && y >= 0 && x <= 7 && y <= 7
@@ -53,7 +59,7 @@ class Board
     rows.each do |row|
       row.each do |piece|
         if piece.color == opponent_color
-          return true if piece.valid_moves.include?(find_king(color))
+          return true if piece.moves.include?(find_king(color))
         end
       end
     end
