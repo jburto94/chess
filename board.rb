@@ -33,23 +33,24 @@ class Board
   end
 
   def test_move(start_pos, end_pos)
-    return true if self[start_pos].is_a?(NullPiece)
-    piece = self[start_pos]
-    temp_start = piece.class.new(piece.color, self, piece.pos)
-    temp_end = self[end_pos].is_a?(NullPiece) ?
+    return true if self[start_pos].empty?
+    start_piece = self[start_pos]
+    end_piece = self[end_pos]
+    temp_start = start_piece.dup_piece
+    temp_end = self[end_pos].empty? ?
       NullPiece.instance :
-      self[end_pos].class.new(self[end_pos].color, self, self[end_pos].pos)
+      end_piece.dup_piece
 
-    self[end_pos] = temp_start.class.new(temp_start.color, self, end_pos)
+    self[end_pos] = temp_start.dup_piece(end_pos)
     self[start_pos] = NullPiece.instance
 
     break_check = self.in_check?(temp_start.color)
-    self[end_pos] = temp_end.is_a?(NullPiece) ? NullPiece.instance : temp_end.class.new(temp_end.color, self, temp_end.pos)
-    self[start_pos] = temp_start.class.new(temp_start.color, self, temp_start.pos)
+    self[end_pos] = temp_end.empty? ? NullPiece.instance : temp_end.dup_piece
+    self[start_pos] = temp_start.dup_piece
     break_check
   end
 
-  
+
 
   def valid_pos?(pos)
     x,y = pos

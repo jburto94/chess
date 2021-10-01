@@ -20,6 +20,10 @@ class Piece
     raise NotImplementedError
   end
 
+  def dup_piece(piece_pos=pos)
+    self.class.new(color, board, piece_pos)
+  end
+
   def valid_moves
     moves.reject { |move| move_into_check?(move) }
   end
