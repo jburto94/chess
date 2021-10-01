@@ -24,16 +24,10 @@ class Display
 
   def move_display
     loop do
-      p "Use directional buttons to move cursor. Ctrl+C to exit."
       render
-      cursor.get_input
+      selection = cursor.get_input
       system("clear")
+      return selection if selection != nil
     end
   end
-end
-
-if $PROGRAM_NAME == __FILE__
-  display = Display.new(Board.new)
-
-  display.move_display
 end

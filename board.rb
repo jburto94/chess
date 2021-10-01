@@ -1,7 +1,7 @@
 require_relative 'pieces'
 
 class Board
-  attr_reader :rows
+  attr_accessor :rows
 
   def initialize
     @rows = Array.new(8) { Array.new(8) }
@@ -20,22 +20,33 @@ class Board
   end
 
   def move_piece(start_pos, end_pos)
-    raise "There is no piece there." if self[start_pos].is_a?(Piece) == false
-    raise "You can't move there." if self[end_pos].is_a?(NullPiece) == false
+    raise ArgumentError.new("You must select a piece to move.") if self[start_pos].is_a?(Piece) == false
+    raise ArgumentError.new("Invalid move.") if self[end_pos].color == self[start_pos].color
 
     if self[start_pos].valid_moves.include?(end_pos)
       self[end_pos] = self[start_pos]
       self[end_pos].pos = end_pos
       self[start_pos] = NullPiece.instance
     else
-      raise "That is not a valid move for that piece"
+      raise ArgumentError.new("Invalid move.")
     end
   end
 
-  def move_piece!(start_pos, end_pos)
-    self[end_pos] = self[start_pos]
-    self[end_pos].pos = end_pos
+  def test_move(start_pos, end_pos)
+    return true if self[start_pos].is_a?(NullPiece)
+    piece = self[start_pos]
+    temp_start = piece.class.new(piece.color, self, piece.pos)
+    temp_end = self[end_pos].is_a?(NullPiece) ?
+      NullPiece.instance :
+      self[end_pos].class.new(self[end_pos].color, self, self[end_pos].pos)
+
+    self[end_pos] = temp_start.class.new(temp_start.color, self, end_pos)
     self[start_pos] = NullPiece.instance
+
+    break_check = self.in_check?(temp_start.color)
+    self[end_pos] = temp_end.is_a?(NullPiece) ? NullPiece.instance : temp_end.class.new(temp_end.color, self, temp_end.pos)
+    self[start_pos] = temp_start.class.new(temp_start.color, self, temp_start.pos)
+    break_check
   end
 
   def valid_pos?(pos)
@@ -44,26 +55,16 @@ class Board
   end
 
   def checkmate?(color)
-    if in_check?(color)
-      rows.each do |row|
-        row.each do |piece|
-          return false if piece.valid_moves.length > 0
-        end
-      end
-      return true
-    end
+    in_check?(color) && pieces(color).all? { |piece| piece.valid_moves.empty? }
   end
 
   def in_check?(color)
     opponent_color = color == :white ? :black : :white
-    rows.each do |row|
-      row.each do |piece|
-        if piece.color == opponent_color
-          return true if piece.moves.include?(find_king(color))
-        end
-      end
-    end
-    false
+    pieces(opponent_color).any? { |piece| piece.moves.include?(find_king(color)) }
+  end
+
+  def pieces(color)
+    rows.flatten.select { |piece| piece.color == color }
   end
 
   def find_king(color)

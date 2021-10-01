@@ -21,16 +21,11 @@ class Piece
   end
 
   def valid_moves
-    moves.reject do |move|
-      move_into_check?(move)
-    end
+    moves.reject { |move| move_into_check?(move) }
   end
 
   def move_into_check?(end_pos)
-    start_pos = pos
-    board.move_piece!(pos, end_pos)
-    check = board.in_check?(color)
-    board.move_piece!(end_pos, start_pos)
-    check
+    return false if !board.in_check?(color)
+    board.test_move(pos, end_pos)
   end
 end

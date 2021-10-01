@@ -43,11 +43,13 @@ module Slideable
       pos = [curr_x, curr_y]
 
       break unless board.valid_pos?(pos)
+      break if board[pos].color == color
 
       if board[pos].empty?
         moves << pos
       else
         moves << pos if board[pos].color != color
+        break
       end
     end
     
