@@ -49,6 +49,8 @@ class Board
     break_check
   end
 
+  
+
   def valid_pos?(pos)
     x,y = pos
     x >= 0 && y >= 0 && x <= 7 && y <= 7

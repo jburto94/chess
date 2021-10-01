@@ -7,7 +7,6 @@ class Player
   end
 
   def make_move
-    puts "Check! #{color.capitalize} must move out of check." if in_check
     puts "#{color.to_s}, select a piece to move."
     start_pos = display.move_display
     puts "#{color.to_s}, select a position to move your piece."
